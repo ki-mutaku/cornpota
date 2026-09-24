@@ -1,0 +1,41 @@
+name: バグ報告
+description: バグを報告する方はこちら
+title: "[BUG]"
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 発生している不具合
+      placeholder: (例) ボタンを押しても画面が遷移しない
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 再現手順
+      placeholder: (例) タイトル画面にアクセス→ボタンを押す
+    validations:
+      required: true
+  - type: textarea
+    id: desired
+    attributes:
+      label: 期待する動作
+      placeholder: (例) ゲーム画面に遷移すること
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境(任意)
+      placeholder: (例) Macbook Air M2, Chrome, Godot 4.7.2
+  - type: textarea
+    id: idea
+    attributes:
+      label: 修正案(任意)
+      placeholder: (例) タイトルシーンのコードを修正する
+  - type: input
+    id: issue
+    attributes:
+      label: 関連Issue(任意)
+      placeholder: "(例) #23"

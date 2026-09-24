@@ -1,0 +1,36 @@
+name: 新機能提案
+description: 新機能を提案したい方はこちら
+title: "[FEATURE]"
+labels: [enhancement]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 概要
+      placeholder: (例) タイトル画面を実装したい
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: なぜこの機能が必要か
+      placeholder: (例) ゲームのタイトルがわかるようにしたい
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: 完了条件
+      placeholder: (例) ボタンを押すとゲーム画面に遷移できる
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: 実装案(任意)
+      placeholder: (例) 2Dシーンを作って、その子要素にタイトル画像を追加する
+  - type: input
+    id: issue
+    attributes:
+      label: 関連Issue(任意)
+      placeholder: "(例) #23"
