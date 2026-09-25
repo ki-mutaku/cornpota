@@ -1,0 +1,97 @@
+name: Deploy WebGL to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+env:
+  GODOT_VERSION: 4.7.2
+  GODOT_RELEASE: stable
+  EXPORT_PRESET: Web
+  EXPORT_PATH: build/web/index.html
+
+jobs:
+  export-webgl:
+    name: Export WebGL build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Godot
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          godot_zip="Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64.zip"
+          godot_bin="Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_linux.x86_64"
+          godot_url="https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/${godot_zip}"
+
+          curl --fail --location --retry 3 --output godot.zip "${godot_url}"
+          unzip -q godot.zip -d godot
+          sudo mv "godot/${godot_bin}" /usr/local/bin/godot
+          sudo chmod +x /usr/local/bin/godot
+
+          godot --version
+
+      - name: Install Godot export templates
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          templates_zip="Godot_v${GODOT_VERSION}-${GODOT_RELEASE}_export_templates.tpz"
+          templates_url="https://github.com/godotengine/godot-builds/releases/download/${GODOT_VERSION}-${GODOT_RELEASE}/${templates_zip}"
+          templates_dir="${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.${GODOT_RELEASE}"
+
+          curl --fail --location --retry 3 --output export_templates.tpz "${templates_url}"
+          mkdir -p "${templates_dir}"
+          unzip -q export_templates.tpz -d export_templates
+          mv export_templates/templates/* "${templates_dir}/"
+
+      - name: Import assets
+        shell: bash
+        run: godot --headless --path . --import --quit
+
+      - name: Export WebGL build
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p "$(dirname "${EXPORT_PATH}")"
+          godot --headless --path . --export-release "${EXPORT_PRESET}" "${EXPORT_PATH}"
+          touch "$(dirname "${EXPORT_PATH}")/.nojekyll"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    needs: export-webgl
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
