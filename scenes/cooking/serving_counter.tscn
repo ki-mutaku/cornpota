@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/cooking/serving_counter.gd" id="1_counter"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/serving_bowl.tscn" id="2_bowl"]
+
+[node name="ServingCounter" type="Node2D"]
+unique_name_in_owner = true
+script = ExtResource("1_counter")
+
+[node name="Counter" type="Polygon2D" parent="."]
+unique_name_in_owner = true
+polygon = PackedVector2Array(-130, -62, 130, -62, 130, 88, -130, 88)
+color = Color(0.58, 0.34, 0.18, 1)
+
+[node name="CounterTop" type="Polygon2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -62)
+polygon = PackedVector2Array(-144, -12, 144, -12, 132, 12, -132, 12)
+color = Color(0.78, 0.53, 0.29, 1)
+
+[node name="ServingBowl" parent="." instance=ExtResource("2_bowl")]

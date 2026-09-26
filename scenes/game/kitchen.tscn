@@ -1,0 +1,231 @@
+[gd_scene format=3 uid="uid://dsrjkga3wfufd"]
+
+[ext_resource type="Script" uid="uid://dtnrxvtel08pa" path="res://scripts/game/kitchen.gd" id="1_kitchen"]
+[ext_resource type="Texture2D" uid="uid://cmds2fkinydhc" path="res://assets/ui/kitchen/kitchen_background.png" id="2_background"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/stove.tscn" id="3_stove"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/pot.tscn" id="4_pot"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/mixer.tscn" id="5_mixer"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/ladle.tscn" id="6_ladle"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/serving_counter.tscn" id="7_counter"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_hud"]
+bg_color = Color(0.21, 0.105, 0.047, 0.94)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.53, 0.31, 0.16, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0.08, 0.035, 0.01, 0.6)
+shadow_size = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_button"]
+bg_color = Color(0.22, 0.11, 0.05, 0.92)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.65, 0.4, 0.2, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_status"]
+bg_color = Color(1, 0.965, 0.84, 0.94)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.45, 0.25, 0.1, 1)
+corner_radius_top_left = 18
+corner_radius_top_right = 18
+corner_radius_bottom_right = 18
+corner_radius_bottom_left = 18
+
+[node name="Kitchen" type="Node2D" unique_id=657208665]
+script = ExtResource("1_kitchen")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1900201772]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+texture = ExtResource("2_background")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="DropHighlights" type="Node2D" parent="." unique_id=88399265]
+z_index = 2
+
+[node name="PotDropHighlight" type="Polygon2D" parent="DropHighlights" unique_id=843086639]
+unique_name_in_owner = true
+visible = false
+position = Vector2(600, 400)
+color = Color(1, 0.78, 0.12, 0.34)
+polygon = PackedVector2Array(-102, -54, -78, -92, -28, -108, 28, -108, 78, -92, 102, -54, 108, 0, 102, 54, 78, 92, 28, 108, -28, 108, -78, 92, -102, 54, -108, 0)
+
+[node name="MixerDropHighlight" type="Polygon2D" parent="DropHighlights" unique_id=1110135829]
+unique_name_in_owner = true
+visible = false
+position = Vector2(170, 336)
+color = Color(1, 0.78, 0.12, 0.34)
+polygon = PackedVector2Array(-94, -86, 94, -86, 94, 86, -94, 86)
+
+[node name="KitchenObjects" type="Node2D" parent="." unique_id=427871630]
+
+[node name="Stove" parent="KitchenObjects" unique_id=2006577683 instance=ExtResource("3_stove")]
+modulate = Color(1, 1, 1, 0.001)
+position = Vector2(779, 370)
+
+[node name="Pot" parent="KitchenObjects" unique_id=1385604494 instance=ExtResource("4_pot")]
+modulate = Color(1, 1, 1, 0.001)
+position = Vector2(600, 400)
+
+[node name="Mixer" parent="KitchenObjects" unique_id=571602389 instance=ExtResource("5_mixer")]
+modulate = Color(1, 1, 1, 0.001)
+position = Vector2(170, 360)
+
+[node name="Ladle" parent="KitchenObjects" unique_id=1677077224 instance=ExtResource("6_ladle")]
+modulate = Color(1, 1, 1, 0.001)
+position = Vector2(885, 390)
+
+[node name="ServingCounter" parent="KitchenObjects" unique_id=882698117 instance=ExtResource("7_counter")]
+position = Vector2(520, 650)
+show_counter_visuals = false
+
+[node name="Ingredients" type="Node2D" parent="." unique_id=793361217]
+
+[node name="Customers" type="Node2D" parent="." unique_id=1011901529]
+
+[node name="DirectInteraction" type="Node2D" parent="." unique_id=1462971303]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1563015400]
+
+[node name="HUDMount" type="Control" parent="UI" unique_id=1989065226]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="SatisfactionPanel" type="PanelContainer" parent="UI/HUDMount" unique_id=1563741566]
+layout_mode = 0
+offset_left = 52.0
+offset_top = 10.0
+offset_right = 330.0
+offset_bottom = 76.0
+theme_override_styles/panel = SubResource("StyleBox_hud")
+
+[node name="Content" type="HBoxContainer" parent="UI/HUDMount/SatisfactionPanel" unique_id=627453654]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Caption" type="Label" parent="UI/HUDMount/SatisfactionPanel/Content" unique_id=853547745]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 20
+text = "満足度"
+
+[node name="Value" type="Label" parent="UI/HUDMount/SatisfactionPanel/Content" unique_id=2036565448]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.78, 0.12, 1)
+theme_override_font_sizes/font_size = 29
+text = "☆ 0 / --"
+
+[node name="TimerPanel" type="PanelContainer" parent="UI/HUDMount" unique_id=2088676614]
+layout_mode = 0
+offset_left = 430.0
+offset_top = 10.0
+offset_right = 714.0
+offset_bottom = 76.0
+theme_override_styles/panel = SubResource("StyleBox_hud")
+
+[node name="Content" type="HBoxContainer" parent="UI/HUDMount/TimerPanel" unique_id=2103233310]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Caption" type="Label" parent="UI/HUDMount/TimerPanel/Content" unique_id=674090873]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 20
+text = "残り時間"
+
+[node name="Value" type="Label" parent="UI/HUDMount/TimerPanel/Content" unique_id=1413415701]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 29
+text = "--:--"
+
+[node name="StagePanel" type="PanelContainer" parent="UI/HUDMount" unique_id=263376973]
+layout_mode = 0
+offset_left = 858.0
+offset_top = 10.0
+offset_right = 1068.0
+offset_bottom = 76.0
+theme_override_styles/panel = SubResource("StyleBox_hud")
+
+[node name="Content" type="VBoxContainer" parent="UI/HUDMount/StagePanel" unique_id=1997106015]
+layout_mode = 2
+alignment = 1
+
+[node name="StageName" type="Label" parent="UI/HUDMount/StagePanel/Content" unique_id=595056708]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 20
+text = "ステージ"
+horizontal_alignment = 1
+
+[node name="Location" type="Label" parent="UI/HUDMount/StagePanel/Content" unique_id=1783146782]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 14
+text = "キッチン"
+horizontal_alignment = 1
+
+[node name="SettingsButton" type="Button" parent="UI/HUDMount" unique_id=412594668]
+layout_mode = 0
+offset_left = 1192.0
+offset_top = 10.0
+offset_right = 1266.0
+offset_bottom = 76.0
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.82, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBox_button")
+theme_override_styles/pressed = SubResource("StyleBox_button")
+theme_override_styles/hover = SubResource("StyleBox_button")
+text = "設定"
+
+[node name="CustomerUIMount" type="Control" parent="UI" unique_id=291618483]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="StatusPanel" type="PanelContainer" parent="UI" unique_id=855619581]
+offset_left = 734.0
+offset_top = 646.0
+offset_right = 1048.0
+offset_bottom = 704.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBox_status")
+
+[node name="StatusLabel" type="Label" parent="UI/StatusPanel" unique_id=300779410]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.12, 0.04, 1)
+theme_override_font_sizes/font_size = 17
+text = "材料を選んで、コンポタを作ろう"
+horizontal_alignment = 1
+vertical_alignment = 1

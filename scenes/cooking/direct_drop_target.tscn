@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/cooking/direct_drop_target.gd" id="1_target"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_target"]
+size = Vector2(128, 128)
+
+[node name="DirectDropTarget" type="Area2D"]
+collision_layer = 2
+collision_mask = 1
+input_pickable = false
+script = ExtResource("1_target")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape_target")

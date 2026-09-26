@@ -52,6 +52,9 @@ jobs:
 
           godot --version
 
+      - name: Build Godot class cache
+        run: godot --headless --path . --editor --quit
+
       - name: Check GDScript syntax
         shell: bash
         run: |
