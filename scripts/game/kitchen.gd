@@ -16,7 +16,7 @@ func _ready() -> void:
 	serving_counter.soup_requested.connect(_on_soup_requested)
 	serving_counter.soup_served.connect(_on_soup_served)
 	pot.contents_changed.connect(_on_pot_contents_changed)
-	status_label.text = "材料Sceneから Pot.add_ingredient() を呼ぶと調理できます"
+	status_label.text = "材料を選んで、コンポタを作ろう"
 
 
 func add_ingredient_to_pot(ingredient: Variant, amount: float = 1.0) -> void:
@@ -31,19 +31,6 @@ func transfer_mixer_contents_to_pot() -> void:
 	for entry: Dictionary in mixer.take_contents():
 		pot.add_ingredient(entry.get("data"), float(entry.get("amount", 1.0)))
 	status_label.text = "ミキサーの中身を鍋へ移しました"
-
-
-func _on_test_add_to_pot_pressed() -> void:
-	add_ingredient_to_pot({"id": "integration_test", "display_name": "接続テスト材料"})
-
-
-func _on_test_add_to_mixer_pressed() -> void:
-	add_ingredient_to_mixer({"id": "integration_test", "display_name": "接続テスト材料"})
-	status_label.text = "ミキサーに接続テスト材料を入れました"
-
-
-func _on_transfer_mixer_pressed() -> void:
-	transfer_mixer_contents_to_pot()
 
 
 func _on_ladle_dragged(pointer_position: Vector2, distance: float) -> void:
