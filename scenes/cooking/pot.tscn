@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/cooking/pot.gd" id="1_pot"]
+[ext_resource type="Script" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
+
+[sub_resource type="CircleShape2D" id="CircleShape_drop"]
+radius = 96.0
 
 [node name="Pot" type="Node2D"]
 unique_name_in_owner = true
@@ -45,3 +49,12 @@ theme_override_colors/font_color = Color(0.16, 0.1, 0.04, 1)
 theme_override_font_sizes/font_size = 18
 text = "材料 0 / 混ぜ 0"
 horizontal_alignment = 1
+
+[node name="IngredientDropArea" type="Area2D" parent="."]
+input_pickable = false
+script = ExtResource("2_drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea"]
+shape = SubResource("CircleShape_drop")
+
+[connection signal="item_received" from="IngredientDropArea" to="." method="_on_ingredient_drop_area_item_received"]

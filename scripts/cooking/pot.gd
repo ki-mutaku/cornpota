@@ -83,6 +83,13 @@ func clear() -> void:
 	_emit_contents_changed()
 
 
+func _on_ingredient_drop_area_item_received(
+	payload: Variant,
+	_source: DirectDraggableItem,
+) -> void:
+	add_ingredient(payload)
+
+
 func _emit_contents_changed() -> void:
 	contents_changed.emit(get_soup_snapshot())
 

@@ -83,7 +83,7 @@ position = Vector2(520, 650)
 
 [node name="Customers" type="Node2D" parent="."]
 
-[node name="Player" type="Node2D" parent="."]
+[node name="DirectInteraction" type="Node2D" parent="."]
 
 [node name="UI" type="CanvasLayer" parent="."]
 

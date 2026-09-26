@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/cooking/mixer.gd" id="1_mixer"]
+[ext_resource type="Script" path="res://scripts/cooking/direct_drop_target.gd" id="2_drop"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_drop"]
+size = Vector2(172, 150)
 
 [node name="Mixer" type="Node2D"]
 unique_name_in_owner = true
@@ -41,5 +45,14 @@ theme_override_font_sizes/font_size = 18
 text = "中身 0"
 horizontal_alignment = 1
 
+[node name="IngredientDropArea" type="Area2D" parent="."]
+position = Vector2(0, -24)
+input_pickable = false
+script = ExtResource("2_drop")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea"]
+shape = SubResource("RectangleShape_drop")
+
 [connection signal="button_down" from="OperationButton" to="." method="_on_operation_button_button_down"]
 [connection signal="button_up" from="OperationButton" to="." method="_on_operation_button_button_up"]
+[connection signal="item_received" from="IngredientDropArea" to="." method="_on_ingredient_drop_area_item_received"]
