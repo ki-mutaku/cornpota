@@ -1,0 +1,30 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/cooking/ladle.gd" id="1_ladle"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape_handle"]
+size = Vector2(76, 190)
+
+[node name="Ladle" type="Node2D"]
+unique_name_in_owner = true
+z_index = 5
+script = ExtResource("1_ladle")
+
+[node name="Handle" type="Polygon2D" parent="."]
+position = Vector2(0, -48)
+polygon = PackedVector2Array(-10, -92, 10, -92, 10, 46, -10, 46)
+color = Color(0.72, 0.76, 0.8, 1)
+
+[node name="Bowl" type="Polygon2D" parent="."]
+position = Vector2(0, 24)
+polygon = PackedVector2Array(-40, -14, 40, -14, 32, 26, 0, 42, -32, 26)
+color = Color(0.62, 0.67, 0.72, 1)
+
+[node name="HandleArea" type="Area2D" parent="."]
+position = Vector2(0, -25)
+input_pickable = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HandleArea"]
+shape = SubResource("RectangleShape_handle")
+
+[connection signal="input_event" from="HandleArea" to="." method="_on_handle_input_event"]

@@ -1,0 +1,111 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/kitchen.gd" id="1_kitchen"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/stove.tscn" id="2_stove"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/pot.tscn" id="3_pot"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/mixer.tscn" id="4_mixer"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/ladle.tscn" id="5_ladle"]
+[ext_resource type="PackedScene" path="res://scenes/cooking/serving_counter.tscn" id="6_counter"]
+
+[node name="Kitchen" type="Node2D"]
+script = ExtResource("1_kitchen")
+
+[node name="Background" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.94, 0.86, 0.68, 1)
+show_behind_parent = true
+
+[node name="BackCounter" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 168, 1280, 168, 1280, 504, 0, 504)
+color = Color(0.84, 0.68, 0.43, 1)
+
+[node name="KitchenObjects" type="Node2D" parent="."]
+
+[node name="Stove" parent="KitchenObjects" instance=ExtResource("2_stove")]
+position = Vector2(340, 388)
+
+[node name="Pot" parent="KitchenObjects" instance=ExtResource("3_pot")]
+position = Vector2(340, 278)
+
+[node name="Mixer" parent="KitchenObjects" instance=ExtResource("4_mixer")]
+position = Vector2(670, 320)
+
+[node name="Ladle" parent="KitchenObjects" instance=ExtResource("5_ladle")]
+position = Vector2(520, 342)
+
+[node name="ServingCounter" parent="KitchenObjects" instance=ExtResource("6_counter")]
+position = Vector2(1020, 358)
+
+[node name="Ingredients" type="Node2D" parent="."]
+
+[node name="Customers" type="Node2D" parent="."]
+
+[node name="Player" type="Node2D" parent="."]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Title" type="Label" parent="UI"]
+offset_left = 32.0
+offset_top = 20.0
+offset_right = 700.0
+offset_bottom = 62.0
+theme_override_colors/font_color = Color(0.2, 0.11, 0.04, 1)
+theme_override_font_sizes/font_size = 30
+text = "コンポタマスター：Kitchen（A担当）"
+
+[node name="Help" type="Label" parent="UI"]
+offset_left = 32.0
+offset_top = 66.0
+offset_right = 970.0
+offset_bottom = 128.0
+theme_override_colors/font_color = Color(0.28, 0.18, 0.09, 1)
+theme_override_font_sizes/font_size = 18
+text = "お玉を鍋の上でドラッグして混ぜる / コンロのツマミを上下ドラッグして火力調整\nミキサーはボタンを押している間だけ作動 / 提供台は『盛る』→『提供する』"
+
+[node name="IntegrationTestPanel" type="PanelContainer" parent="UI"]
+offset_left = 28.0
+offset_top = 560.0
+offset_right = 812.0
+offset_bottom = 626.0
+
+[node name="Buttons" type="HBoxContainer" parent="UI/IntegrationTestPanel"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Caption" type="Label" parent="UI/IntegrationTestPanel/Buttons"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "A担当 単体確認："
+
+[node name="AddToPot" type="Button" parent="UI/IntegrationTestPanel/Buttons"]
+layout_mode = 2
+focus_mode = 0
+text = "テスト材料→鍋"
+
+[node name="AddToMixer" type="Button" parent="UI/IntegrationTestPanel/Buttons"]
+layout_mode = 2
+focus_mode = 0
+text = "テスト材料→ミキサー"
+
+[node name="TransferMixer" type="Button" parent="UI/IntegrationTestPanel/Buttons"]
+layout_mode = 2
+focus_mode = 0
+text = "ミキサー→鍋"
+
+[node name="StatusLabel" type="Label" parent="UI"]
+unique_name_in_owner = true
+offset_left = 28.0
+offset_top = 650.0
+offset_right = 1252.0
+offset_bottom = 700.0
+theme_override_colors/font_color = Color(0.2, 0.11, 0.04, 1)
+theme_override_font_sizes/font_size = 20
+text = "準備中"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="UI/IntegrationTestPanel/Buttons/AddToPot" to="." method="_on_test_add_to_pot_pressed"]
+[connection signal="pressed" from="UI/IntegrationTestPanel/Buttons/AddToMixer" to="." method="_on_test_add_to_mixer_pressed"]
+[connection signal="pressed" from="UI/IntegrationTestPanel/Buttons/TransferMixer" to="." method="_on_transfer_mixer_pressed"]

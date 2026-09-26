@@ -1,0 +1,74 @@
+extends Node2D
+
+signal soup_served(soup: Variant)
+
+@onready var pot: CookingPot = %Pot
+@onready var stove: CookingStove = %Stove
+@onready var ladle: CookingLadle = %Ladle
+@onready var mixer: CookingMixer = %Mixer
+@onready var serving_counter: ServingCounter = %ServingCounter
+@onready var status_label: Label = %StatusLabel
+
+
+func _ready() -> void:
+	stove.heat_changed.connect(pot.set_heat_level)
+	ladle.dragged.connect(_on_ladle_dragged)
+	serving_counter.soup_requested.connect(_on_soup_requested)
+	serving_counter.soup_served.connect(_on_soup_served)
+	pot.contents_changed.connect(_on_pot_contents_changed)
+	status_label.text = "材料Sceneから Pot.add_ingredient() を呼ぶと調理できます"
+
+
+func add_ingredient_to_pot(ingredient: Variant, amount: float = 1.0) -> void:
+	pot.add_ingredient(ingredient, amount)
+
+
+func add_ingredient_to_mixer(ingredient: Variant, amount: float = 1.0) -> void:
+	mixer.add_ingredient(ingredient, amount)
+
+
+func transfer_mixer_contents_to_pot() -> void:
+	for entry: Dictionary in mixer.take_contents():
+		pot.add_ingredient(entry.get("data"), float(entry.get("amount", 1.0)))
+	status_label.text = "ミキサーの中身を鍋へ移しました"
+
+
+func _on_test_add_to_pot_pressed() -> void:
+	add_ingredient_to_pot({"id": "integration_test", "display_name": "接続テスト材料"})
+
+
+func _on_test_add_to_mixer_pressed() -> void:
+	add_ingredient_to_mixer({"id": "integration_test", "display_name": "接続テスト材料"})
+	status_label.text = "ミキサーに接続テスト材料を入れました"
+
+
+func _on_transfer_mixer_pressed() -> void:
+	transfer_mixer_contents_to_pot()
+
+
+func _on_ladle_dragged(pointer_position: Vector2, distance: float) -> void:
+	if pot.contains_global_point(pointer_position):
+		pot.register_stir_distance(distance)
+
+
+func _on_soup_requested() -> void:
+	var soup: Dictionary = pot.take_soup_snapshot()
+	if soup.is_empty():
+		status_label.text = "鍋に材料がありません"
+		return
+	serving_counter.set_soup(soup)
+	status_label.text = "盛り付けました。提供台をもう一度タップしてください"
+
+
+func _on_soup_served(soup: Variant) -> void:
+	status_label.text = "提供しました（Customer担当へ signal 接続可能）"
+	soup_served.emit(soup)
+
+
+func _on_pot_contents_changed(snapshot: Dictionary) -> void:
+	var ingredient_count: int = snapshot.get("ingredients", []).size()
+	if ingredient_count > 0:
+		status_label.text = "調理中：材料 %d / 火力 %d%%" % [
+			ingredient_count,
+			roundi(float(snapshot.get("heat_level", 0.0)) * 100.0),
+		]
