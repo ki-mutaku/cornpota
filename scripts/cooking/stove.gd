@@ -60,6 +60,11 @@ func _end_drag() -> void:
 	_touch_index = -1
 
 
+func reset_state() -> void:
+	_end_drag()
+	_set_heat_level(0.0)
+
+
 func _set_heat_level(value: float, emit_change: bool = true) -> void:
 	heat_level = clampf(value, 0.0, 1.0)
 	knob.rotation = lerpf(-2.3, 2.3, heat_level)

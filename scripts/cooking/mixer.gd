@@ -33,6 +33,13 @@ func take_contents() -> Array[Dictionary]:
 	return result
 
 
+func reset_state() -> void:
+	is_operating = false
+	contents.clear()
+	contents_changed.emit([])
+	_refresh_label()
+
+
 func _on_ingredient_drop_area_item_received(
 	payload: Variant,
 	_source: DirectDraggableItem,

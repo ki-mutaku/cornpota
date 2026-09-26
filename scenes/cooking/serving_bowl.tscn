@@ -1,0 +1,45 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/cooking/serving_bowl.gd" id="1_bowl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape_bowl"]
+radius = 52.0
+
+[node name="ServingBowl" type="Area2D"]
+unique_name_in_owner = true
+collision_layer = 1
+collision_mask = 2
+input_pickable = true
+script = ExtResource("1_bowl")
+drag_tag = &"bowl"
+accepted_behavior = 1
+
+[node name="Shadow" type="Polygon2D" parent="."]
+position = Vector2(3, 7)
+polygon = PackedVector2Array(-54, -20, 54, -20, 42, 24, -42, 24)
+color = Color(0.08, 0.04, 0.01, 0.35)
+
+[node name="BowlBody" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-58, -24, 58, -24, 44, 24, -44, 24)
+color = Color(0.92, 0.9, 0.82, 1)
+
+[node name="SoupFill" type="Polygon2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -15)
+polygon = PackedVector2Array(-48, -8, 48, -8, 42, 8, -42, 8)
+color = Color(1, 0.72, 0.14, 1)
+
+[node name="BowlLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = -52.0
+offset_top = 28.0
+offset_right = 52.0
+offset_bottom = 52.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.2, 0.1, 0.03, 1)
+theme_override_font_sizes/font_size = 15
+text = "器"
+horizontal_alignment = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape_bowl")

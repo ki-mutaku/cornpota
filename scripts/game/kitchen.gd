@@ -8,14 +8,28 @@ signal soup_served(soup: Variant)
 @onready var mixer: CookingMixer = %Mixer
 @onready var serving_counter: ServingCounter = %ServingCounter
 @onready var status_label: Label = %StatusLabel
+@onready var pot_drop_highlight: Polygon2D = %PotDropHighlight
+@onready var mixer_drop_highlight: Polygon2D = %MixerDropHighlight
+@onready var pot_ingredient_drop_area: DirectDropTarget = (
+	pot.get_node("IngredientDropArea") as DirectDropTarget
+)
+@onready var pot_bowl_drop_area: DirectDropTarget = (
+	pot.get_node("BowlDropArea") as DirectDropTarget
+)
+@onready var mixer_ingredient_drop_area: DirectDropTarget = (
+	mixer.get_node("IngredientDropArea") as DirectDropTarget
+)
 
 
 func _ready() -> void:
 	stove.heat_changed.connect(pot.set_heat_level)
 	ladle.dragged.connect(_on_ladle_dragged)
-	serving_counter.soup_requested.connect(_on_soup_requested)
 	serving_counter.soup_served.connect(_on_soup_served)
+	serving_counter.soup_changed.connect(_on_serving_soup_changed)
 	pot.contents_changed.connect(_on_pot_contents_changed)
+	pot_ingredient_drop_area.highlight_changed.connect(_on_pot_highlight_changed)
+	pot_bowl_drop_area.highlight_changed.connect(_on_pot_highlight_changed)
+	mixer_ingredient_drop_area.highlight_changed.connect(_on_mixer_highlight_changed)
 	status_label.text = "材料を選んで、コンポタを作ろう"
 
 
@@ -38,18 +52,36 @@ func _on_ladle_dragged(pointer_position: Vector2, distance: float) -> void:
 		pot.register_stir_distance(distance)
 
 
-func _on_soup_requested() -> void:
-	var soup: Dictionary = pot.take_soup_snapshot()
-	if soup.is_empty():
-		status_label.text = "鍋に材料がありません"
-		return
-	serving_counter.set_soup(soup)
-	status_label.text = "盛り付けました。提供台をもう一度タップしてください"
-
-
 func _on_soup_served(soup: Variant) -> void:
 	status_label.text = "提供しました（Customer担当へ signal 接続可能）"
 	soup_served.emit(soup)
+
+
+func _on_serving_soup_changed(soup: Variant) -> void:
+	if soup != null:
+		status_label.text = "盛り付けました。器を客へドラッグしてください"
+
+
+func _on_pot_highlight_changed(active: bool) -> void:
+	pot_drop_highlight.visible = active
+
+
+func _on_mixer_highlight_changed(active: bool) -> void:
+	mixer_drop_highlight.visible = active
+
+
+func reset_cooking_state() -> void:
+	pot.reset_state()
+	stove.reset_state()
+	mixer.reset_state()
+	ladle.reset_state()
+	serving_counter.reset_state()
+	pot_drop_highlight.visible = false
+	mixer_drop_highlight.visible = false
+	for node: Node in get_tree().get_nodes_in_group(&"direct_draggable_item"):
+		if node is DirectDraggableItem:
+			node.reset_to_home()
+	status_label.text = "材料を選んで、コンポタを作ろう"
 
 
 func _on_pot_contents_changed(snapshot: Dictionary) -> void:

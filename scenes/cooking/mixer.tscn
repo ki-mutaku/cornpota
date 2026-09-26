@@ -47,6 +47,8 @@ horizontal_alignment = 1
 
 [node name="IngredientDropArea" type="Area2D" parent="."]
 position = Vector2(0, -24)
+collision_layer = 2
+collision_mask = 1
 input_pickable = false
 script = ExtResource("2_drop")
 

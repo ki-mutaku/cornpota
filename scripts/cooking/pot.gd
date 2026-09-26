@@ -15,6 +15,7 @@ var ingredients: Array[Dictionary] = []
 @onready var soup_surface: Polygon2D = %SoupSurface
 @onready var heat_glow: Polygon2D = %HeatGlow
 @onready var state_label: Label = %StateLabel
+@onready var bowl_drop_area: DirectDropTarget = %BowlDropArea
 
 
 func _ready() -> void:
@@ -27,6 +28,7 @@ func add_ingredient(ingredient: Variant, amount: float = 1.0) -> void:
 
 	ingredients.append({"data": ingredient, "amount": amount})
 	ingredient_added.emit(ingredient, amount)
+	_refresh_visuals()
 	_emit_contents_changed()
 
 
@@ -83,11 +85,28 @@ func clear() -> void:
 	_emit_contents_changed()
 
 
+func reset_state() -> void:
+	heat_level = 0.0
+	clear()
+
+
 func _on_ingredient_drop_area_item_received(
 	payload: Variant,
 	_source: DirectDraggableItem,
 ) -> void:
 	add_ingredient(payload)
+
+
+func _on_bowl_drop_area_item_received(
+	_payload: Variant,
+	source: DirectDraggableItem,
+) -> void:
+	if not source is ServingBowl or not has_contents():
+		return
+	var bowl: ServingBowl = source as ServingBowl
+	if bowl.has_soup():
+		return
+	bowl.fill_soup(take_soup_snapshot())
 
 
 func _emit_contents_changed() -> void:
@@ -97,4 +116,5 @@ func _emit_contents_changed() -> void:
 func _refresh_visuals() -> void:
 	soup_surface.visible = not ingredients.is_empty()
 	heat_glow.modulate.a = heat_level * 0.8
+	bowl_drop_area.enabled = has_contents()
 	state_label.text = "材料 %d / 混ぜ %.0f" % [ingredients.size(), stir_distance]

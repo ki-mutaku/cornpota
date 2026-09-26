@@ -11,6 +11,11 @@ var _dragging: bool = false
 var _touch_index: int = -1
 var _grab_offset: Vector2 = Vector2.ZERO
 var _last_position: Vector2 = Vector2.ZERO
+var _home_global_position: Vector2 = Vector2.ZERO
+
+
+func _ready() -> void:
+	_home_global_position = global_position
 
 
 func _input(event: InputEvent) -> void:
@@ -60,3 +65,10 @@ func _end_drag() -> void:
 	_touch_index = -1
 	z_index = 5
 	drag_ended.emit()
+
+
+func reset_state() -> void:
+	_dragging = false
+	_touch_index = -1
+	global_position = _home_global_position
+	z_index = 5

@@ -51,10 +51,24 @@ text = "材料 0 / 混ぜ 0"
 horizontal_alignment = 1
 
 [node name="IngredientDropArea" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 1
 input_pickable = false
 script = ExtResource("2_drop")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="IngredientDropArea"]
 shape = SubResource("CircleShape_drop")
 
+[node name="BowlDropArea" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 2
+collision_mask = 1
+input_pickable = false
+script = ExtResource("2_drop")
+accepted_tag = &"bowl"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BowlDropArea"]
+shape = SubResource("CircleShape_drop")
+
 [connection signal="item_received" from="IngredientDropArea" to="." method="_on_ingredient_drop_area_item_received"]
+[connection signal="item_received" from="BowlDropArea" to="." method="_on_bowl_drop_area_item_received"]
