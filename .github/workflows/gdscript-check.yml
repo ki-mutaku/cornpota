@@ -55,26 +55,5 @@ jobs:
       - name: Check GDScript syntax
         shell: bash
         run: |
-          set -uo pipefail
-
-          found=0
-          status=0
-
-          while IFS= read -r -d '' script; do
-            found=1
-            echo "::group::${script}"
-            godot --headless --path . --check-only --script "${script}" || status=1
-            echo '::endgroup::'
-          done < <(
-            find . \
-              -path './.git' -prune -o \
-              -path './.godot' -prune -o \
-              -type f -name '*.gd' -print0
-          )
-
-          if (( found == 0 )); then
-            echo 'No GDScript files found.'
-            exit 0
-          fi
-
-          exit "${status}"
+          set -euo pipefail
+          godot --headless --path . --check-only
